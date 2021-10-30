@@ -10,6 +10,6 @@ runs:
     - run: |
         curl https://www.japheth.de/Download/JWasm/JWasm211bl.zip > ${{ runner.temp }}/jwasm.zip
         mkdir "$GITHUB_WORKSPACE"/bin
-        unzip -p ${{ runner.temp }}/jwasm.zip jwasm > "$GITHUB_WORKSAPCE"/bin/jwasm
+        unzip -p ${{ runner.temp }}/jwasm.zip jwasm > "$GITHUB_WORKSPACE"/bin/jwasm
         echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
       shell: 'bash'

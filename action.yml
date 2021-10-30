@@ -43,6 +43,7 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwasm.zip jwasm${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwasm${binary_ext}
           }
           chmod 755 bin/jwasm${binary_ext}
+          sha1sum bin/jwasm${binary_ext}
         fi
         if ${{ inputs.jwlink }};
         then
@@ -52,6 +53,7 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlink${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlink${binary_ext}
           }
           chmod 755 bin/jwlink${binary_ext}
+          sha1sum bin/jwlink${binary_ext}
         fi
         if ${{ inputs.jwlib }};
         then
@@ -61,6 +63,7 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlib${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlib${binary_ext}
           }
           chmod 755 bin/jwlib${binary_ext}
+          sha1sum bin/jwlib${binary_ext}
         fi
         echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
       shell: 'bash'

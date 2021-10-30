@@ -36,7 +36,7 @@ runs:
           os_name=linux
           jwasm_sha1=92d491dca098a45ef4813376561164270047d4ea
           jwlink_sha1=3ad4f2a73a98c24e9fdecf48d3773626a2369bf0
-          jwlin_sha1=130e66eeef4d67310333eeffda09374cf35f8d3b
+          jwlib_sha1=130e66eeef4d67310333eeffda09374cf35f8d3b
         fi
         if [ ${{ runner.os }} == Windows ]
         then
@@ -45,7 +45,7 @@ runs:
           os_name=win32
           jwasm_sha1=118e1cb00b6bd21eee42ff5bd4a2f7cb46e65ba0
           jwlink_sha1=457350480f040b3e872b3eb57e2c0f98eba7ebc4
-          jwlin_sha1=993f0ce2657afe9b94cba9f6c600aeca2b2f8284
+          jwlib_sha1=993f0ce2657afe9b94cba9f6c600aeca2b2f8284
         fi
         if ${{ inputs.jwasm }};
         then

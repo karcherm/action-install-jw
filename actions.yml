@@ -1,0 +1,15 @@
+name: 'Install jw tools'
+description: 'Install OpenWatcom-derived development tools'
+inputs:
+  wasm:
+    description: 'Install wasm'
+    default: false
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        curl https://www.japheth.de/Download/JWasm/JWasm211bl.zip > ${{ runner.temp }}/jwasm.zip
+        mkdir "$GITHUB_WORKSPACE"/bin
+        unzip -p ${{ runner.temp }}/jwasm.zip jwasm > "$GITHUB_WORKSAPCE"/bin/jwasm
+        echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
+      shell: 'bash'

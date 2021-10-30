@@ -18,7 +18,7 @@ runs:
         [ ${{ runner.os }} == Windows ] && binary_name=jwasm.exe
         [ ${{ runner.os }} == Windows ] && zip_url=https://www.japheth.de/Download/JWasm/JWasm211bw.zip        
         [ -f "$GITHUB_WORKSPACE"/bin/${binary_name} ] || {
-          curl https://www.japheth.de/Download/JWasm/JWasm211bl.zip > '${{ runner.temp }}'/jwasm.zip
+          curl $zip_url > '${{ runner.temp }}'/jwasm.zip
           mkdir "$GITHUB_WORKSPACE"/bin
           unzip -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
           chmod 755 bin/${binary_name}

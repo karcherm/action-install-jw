@@ -29,12 +29,24 @@ runs:
         path: bin/jwlib*
         key: jwlib2-${{ runner.os }}-${{ inputs.jwlib }}
     - run: |
-        [ ${{ runner.os }} == Linux ] && binary_ext=
-        [ ${{ runner.os }} == Linux ] && os_letter=l
-        [ ${{ runner.os }} == Linux ] && os_name=linux
-        [ ${{ runner.os }} == Windows ] && binary_ext=.exe
-        [ ${{ runner.os }} == Windows ] && os_letter=w
-        [ ${{ runner.os }} == Windows ] && os_name=win32
+        if [ ${{ runner.os }} == Linux ]
+        then
+          binary_ext=
+          os_letter=l
+          os_name=linux
+          jwasm_sha1=92d491dca098a45ef4813376561164270047d4ea
+          jwlink_sha1=3ad4f2a73a98c24e9fdecf48d3773626a2369bf0
+          jwlin_sha1=130e66eeef4d67310333eeffda09374cf35f8d3b
+        fi
+        if [ ${{ runner.os }} == Windows ]
+        then
+          binary_ext=.exe
+          os_letter=w
+          os_name=win32
+          jwasm_sha1=118e1cb00b6bd21eee42ff5bd4a2f7cb46e65ba0
+          jwlink_sha1=457350480f040b3e872b3eb57e2c0f98eba7ebc4
+          jwlin_sha1=993f0ce2657afe9b94cba9f6c600aeca2b2f8284
+        fi
         if ${{ inputs.jwasm }};
         then
           [ -f "$GITHUB_WORKSPACE"/bin/jwasm${binary_ext} ] || {
@@ -43,7 +55,12 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwasm.zip jwasm${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwasm${binary_ext}
           }
           chmod 755 bin/jwasm${binary_ext}
-          sha1sum bin/jwasm${binary_ext}
+          actual_sha1=$(sha1sum bin/jwasm${binary_ext} | cut -c 1-40)
+          if ! [ $actual_sha1 == $jwasm_sha1 ]
+          then
+            echo JWasm checksum $actual_sha1 doesn\'t match expected $jwasm_sha1
+            exit 1
+          fi
         fi
         if ${{ inputs.jwlink }};
         then
@@ -53,7 +70,12 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlink${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlink${binary_ext}
           }
           chmod 755 bin/jwlink${binary_ext}
-          sha1sum bin/jwlink${binary_ext}
+          actual_sha1=$(sha1sum bin/jwlink${binary_ext} | cut -c 1-40)
+          if ! [ $actual_sha1 == $jwlink_sha1 ]
+          then
+            echo JWlink checksum $actual_sha1 doesn\'t match expected $jwlink_sha1
+            exit 1
+          fi
         fi
         if ${{ inputs.jwlib }};
         then
@@ -63,7 +85,12 @@ runs:
             unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlib${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlib${binary_ext}
           }
           chmod 755 bin/jwlib${binary_ext}
-          sha1sum bin/jwlib${binary_ext}
+          actual_sha1=$(sha1sum bin/jwlib${binary_ext} | cut -c 1-40)
+          if ! [ $actual_sha1 == $jwlib_sha1 ]
+          then
+            echo JWlib checksum $actual_sha1 doesn\'t match expected $jwlib_sha1
+            exit 1
+          fi
         fi
         echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
       shell: 'bash'

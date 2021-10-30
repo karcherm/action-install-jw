@@ -21,7 +21,7 @@ runs:
           curl $zip_url > '${{ runner.temp }}'/jwasm.zip
           mkdir "$GITHUB_WORKSPACE"/bin
           unzip -C -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
-          chmod 755 bin/${binary_name}
-          echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
         }
+        chmod 755 bin/${binary_name}
+        echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
       shell: 'bash'

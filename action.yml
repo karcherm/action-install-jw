@@ -11,6 +11,7 @@ runs:
       id: cache-jwasm
       with:
         path: bin/jwasm
+        key: jwasm-${{ runner.os }}
     - run: |
         ${{ fromJSON( toJSON(steps.cache-jwasm.outputs.cache-hit)) }} || {
           curl https://www.japheth.de/Download/JWasm/JWasm211bl.zip > ${{ runner.temp }}/jwasm.zip

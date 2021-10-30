@@ -4,6 +4,12 @@ inputs:
   jwasm:
     description: 'Install jwasm'
     default: false
+  jwlink:
+    description: 'Install jwlink'
+    default: false
+  jwlib:
+    description: 'Install jwlib'
+    default: false
 runs:
   using: 'composite'
   steps:
@@ -11,17 +17,50 @@ runs:
       id: cache-jwasm
       with:
         path: bin/jwasm*
-        key: jwasm2-${{ runner.os }}
+        key: jwasm-${{ runner.os }}-${{ inputs.jwasm }}
+    - uses: actions/cache@v2
+      id: cache-jwlink
+      with:
+        path: bin/jwlink*
+        key: jwlink-${{ runner.os }}-${{ inputs.jwlink }}
+    - uses: actions/cache@v2
+      id: cache-jwlib
+      with:
+        path: bin/jwlib*
+        key: jwlib-${{ runner.os }}-${{ inputs.jwlib }}
     - run: |
-        [ ${{ runner.os }} == Linux ] && binary_name=jwasm
-        [ ${{ runner.os }} == Linux ] && zip_url=https://www.japheth.de/Download/JWasm/JWasm211bl.zip
-        [ ${{ runner.os }} == Windows ] && binary_name=jwasm.exe
-        [ ${{ runner.os }} == Windows ] && zip_url=https://www.japheth.de/Download/JWasm/JWasm211bw.zip        
-        [ -f "$GITHUB_WORKSPACE"/bin/${binary_name} ] || {
-          curl $zip_url > '${{ runner.temp }}'/jwasm.zip
-          mkdir "$GITHUB_WORKSPACE"/bin
-          unzip -C -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
-        }
-        chmod 755 bin/${binary_name}
+        [ ${{ runner.os }} == Linux ] && binary_ext=
+        [ ${{ runner.os }} == Linux ] && os_letter=l
+        [ ${{ runner.os }} == Linux ] && os_name=linux
+        [ ${{ runner.os }} == Windows ] && binary_ext=.exe
+        [ ${{ runner.os }} == Windows ] && os_letter=w
+        [ ${{ runner.os }} == Windows ] && os_name=win32
+        if ${{ inputs.jwasm }};
+        then
+          [ -f "$GITHUB_WORKSPACE"/bin/jwasm${binary_ext} ] || {
+            curl https://www.japheth.de/Download/JWasm/JWasm211b${os_letter}.zip > '${{ runner.temp }}'/jwasm.zip
+            mkdir -p "$GITHUB_WORKSPACE"/bin
+            unzip -C -p '${{ runner.temp }}'/jwasm.zip jwasm${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwasm${binary_ext}
+          }
+          chmod 755 bin/jwasm${binary_ext}
+        fi
+        if ${{ inputs.jwlink }};
+        then
+          [ -f "$GITHUB_WORKSPACE"/bin/jwlink${binary_ext} ] || {
+            curl https://www.japheth.de/Download/JWlink/JWlink_v19b13_${os_name}.zip > '${{ runner.temp }}'/jwlink.zip
+            mkdir -p "$GITHUB_WORKSPACE"/bin
+            unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlink${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlink${binary_ext}
+          }
+          chmod 755 bin/jwlink${binary_ext}
+        fi
+        if ${{ inputs.jwlib }};
+        then
+          [ -f "$GITHUB_WORKSPACE"/bin/jwlib${binary_ext} ] || {
+            [ -f '${{ runner.temp }}'/jwlink.zip ] || curl https://www.japheth.de/Download/JWlink/JWlink_v19b13_${os_name}.zip > '${{ runner.temp }}'/jwlink.zip
+            mkdir -p "$GITHUB_WORKSPACE"/bin
+            unzip -C -p '${{ runner.temp }}'/jwlink.zip jwlib${binary_ext} > "$GITHUB_WORKSPACE"/bin/jwlib${binary_ext}
+          }
+          chmod 755 bin/jwlib${binary_ext}
+        fi
         echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
       shell: 'bash'

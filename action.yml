@@ -17,17 +17,17 @@ runs:
       id: cache-jwasm
       with:
         path: bin/jwasm*
-        key: jwasm-${{ runner.os }}-${{ inputs.jwasm }}
+        key: jwasm2-${{ runner.os }}-${{ inputs.jwasm }}
     - uses: actions/cache@v2
       id: cache-jwlink
       with:
         path: bin/jwlink*
-        key: jwlink-${{ runner.os }}-${{ inputs.jwlink }}
+        key: jwlink2-${{ runner.os }}-${{ inputs.jwlink }}
     - uses: actions/cache@v2
       id: cache-jwlib
       with:
         path: bin/jwlib*
-        key: jwlib-${{ runner.os }}-${{ inputs.jwlib }}
+        key: jwlib2-${{ runner.os }}-${{ inputs.jwlib }}
     - run: |
         [ ${{ runner.os }} == Linux ] && binary_ext=
         [ ${{ runner.os }} == Linux ] && os_letter=l

@@ -10,14 +10,18 @@ runs:
     - uses: actions/cache@v2
       id: cache-jwasm
       with:
-        path: bin/jwasm
-        key: jwasm-${{ runner.os }}
+        path: bin/jwasm*
+        key: jwasm2-${{ runner.os }}
     - run: |
-        [ -f "$GITHUB_WORKSPACE"/bin/jwasm ] || {
+        [ ${{ runner.os }} == Linux ] && binary_name=jwasm
+        [ ${{ runner.os }} == Linux ] && zip_url=https://www.japheth.de/Download/JWasm/JWasm211bl.zip
+        [ ${{ runner.os }} == Windows ] && binary_name=jwasm.exe
+        [ ${{ runner.os }} == Windows ] && zip_url=https://www.japheth.de/Download/JWasm/JWasm211bw.zip        
+        [ -f "$GITHUB_WORKSPACE"/bin/${binary_name} ] || {
           curl https://www.japheth.de/Download/JWasm/JWasm211bl.zip > '${{ runner.temp }}'/jwasm.zip
           mkdir "$GITHUB_WORKSPACE"/bin
-          unzip -p '${{ runner.temp }}'/jwasm.zip jwasm > "$GITHUB_WORKSPACE"/bin/jwasm
-          chmod 755 bin/jwasm
+          unzip -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
+          chmod 755 bin/${binary_name}
           echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
         }
       shell: 'bash'

@@ -20,7 +20,7 @@ runs:
         [ -f "$GITHUB_WORKSPACE"/bin/${binary_name} ] || {
           curl $zip_url > '${{ runner.temp }}'/jwasm.zip
           mkdir "$GITHUB_WORKSPACE"/bin
-          unzip -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
+          unzip -C -p '${{ runner.temp }}'/jwasm.zip ${binary_name} > "$GITHUB_WORKSPACE"/bin/${binary_name}
           chmod 755 bin/${binary_name}
           echo "$GITHUB_WORKSPACE"/bin >> $GITHUB_PATH
         }

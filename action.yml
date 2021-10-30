@@ -1,8 +1,8 @@
 name: 'Install jw tools'
 description: 'Install OpenWatcom-derived development tools'
 inputs:
-  wasm:
-    description: 'Install wasm'
+  jwasm:
+    description: 'Install jwasm'
     default: false
 runs:
   using: 'composite'
